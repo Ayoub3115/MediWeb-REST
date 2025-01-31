@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente RPC</title>
+    <style>
+        /* Pegue el CSS aquí */
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1, h2 {
+            color: #343a40;
+            text-align: center;
+        }
+
+        #loginForm, #registroFormContainer, #editarFormContainer, #asignarExpedienteContainer, #consultarExpedientesForm, #resolverExpedientesForm {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+
+        input[type="text"], input[type="password"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background-color: #08925d;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0a9142;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0d7657;
+            color: #fff;
+        }
+
+        td {
+            background-color: #f8f9fa;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Médico ME</h1>
+
+    <div id="loginForm">
+        <label for="login">Usuario:</label>
+        <input type="text" id="login" name="login"><br>
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password"><br>
+        <button type="button" id="loginButton">Entrar</button>
+    </div>
+    <button type="button" id="registroButton">Registrarse</button>
+
+    <!-- Registro -->
+    <!-- Registro -->
+    <div id="registroFormContainer" class="hidden">
+        <h2>Datos médico</h2>
+        <form id="registerForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombreregistro" name="nombre"><br>
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidosregistro" name="apellidos"><br>
+            <label for="loginRegistro">Usuario:</label>
+            <input type="text" id="loginregistro" name="loginRegistro"><br>
+            <label for="passwordRegistro">Contraseña:</label>
+            <input type="password" id="passwordregistro" name="passwordRegistro"><br>
+            <label for="centroId">Centro:</label>
+            <select id="centroIdregistro" name="centroId">
+                
+            </select><br>
+            <label for="especialidad">Especialidad:</label>
+            <select type="text" id="especialidadregistro" name="especialidad"><br>
+            </select><br>
+            <button type="button" id="guardarButtonregistro">Guardar</button>
+            <button type="button" id="cancelarButtonregistro">Cancelar</button>
+        </form>
+    </div>
+
+    <div id="nombre" class="hidden">
+        <p id="nombreApellidos"></p>
+    </div>
+
+    <!-- Editar los datos del medico -->
+    <button type="button" id="editarButton" class="hidden">Editar</button>
+
+    <div id="editarFormContainer" class="hidden">
+        <h2>Editar datos médico</h2>
+        <div id="editarForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombreeditar" name="nombre"><br>
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidoseditar" name="apellidos"><br>
+            <label for="loginRegistro">Usuario:</label>
+            <input type="text" id="logineditar" name="loginRegistro"><br>
+            <label for="passwordRegistro">Contraseña:</label>
+            <input type="password" id="passwordeditar" name="passwordRegistro"><br>
+            <label for="centroId">Centro:</label>
+            <select id="centroIdeditar" name="centroId">
+                
+            </select><br>
+            <label for="especialidad">Especialidad:</label>
+            <select id="especialidadeditar" name="especialidad">
+            </select><br>
+            <button type="button" id="guardarButtoneditar">Guardar</button>
+            <button type="button" id="cancelarButtoneditar">Cancelar</button>
+        </div>
+    </div>
+    <!--Boton de cerrar sesion-->
+    <button type="button" id="cerrarSesionButton" class="hidden">Cerrar sesión</button>
+    
+
+    
+
+    <!-- tabla para asignarse expedientes libres-->
+    <button type="button" id="asignarExpedienteButton" class="hidden">Asignar expediente</button>
+    <div id="asignarExpedienteContainer" class="hidden">
+
+        <h2>Asignar expediente</h2>
+        
+        <table id="asignarExpedienteTable">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>F.Cre.</th>
+                    <th>MAP</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button type="button" id="cancelarAsignarExpedienteButton">volver al inicio</button>
+    </div>
+
+    <!--Se muestran los datos del expediente -->
+    <div id="consultarExpedientesForm" class="hidden">
+        <h2>Expediente</h2>
+        <form>
+            <label for="idExpediente">ID Expediente:</label>
+            <input type="text" id="idExpediente" name="idExpediente" readonly><br>
+            <label for="fechaCreacion">Fecha Creación:</label>
+            <input type="text" id="fechaCreacion" name="fechaCreacion" readonly><br>
+            <label for="fechaAsignacion">Fecha Asignación:</label>
+            <input type="text" id="fechaAsignacion" name="fechaAsignacion" readonly><br>
+            <label for="fechaResolucion">Fecha Resolución:</label>
+            <input type="text" id="fechaResolucion" name="fechaResolucion" readonly><br>
+            <label for="especialidad">Especialidad:</label>
+            <input type="text" id="especialidadconsulta" name="especialidad" readonly><br>
+            
+            <label for="sip">SIP:</label>
+            <input type="text" id="sip" name="sip" readonly><br>
+            <label for="nombrePaciente">Nombre Paciente:</label>
+            <input type="text" id="nombrePaciente" name="nombrePaciente" readonly><br>
+            <label for="apellidosPaciente">Apellidos Paciente:</label>
+            <input type="text" id="apellidosPaciente" name="apellidosPaciente" readonly><br>
+            <label for="solicitud">Solicitud:</label><br>
+            <textarea id="solicitud" name="solicitud" rows="4" cols="50" readonly></textarea><br>
+            <label for="observaciones">Observaciones:</label><br>
+            <textarea id="observaciones" name="observaciones" rows="4" cols="50" readonly></textarea><br>
+            <label for="respuesta">Respuesta:</label><br>
+            <textarea id="respuesta" name="respuesta" rows="4" cols="50" ></textarea><br>
+            <button type="button" id="resolverExpedientesButton">Resolver</button>
+            <button type="button" id="cancelarConsultarExpedientesButton">Cancelar</button>
+        </form>
+    </div>
+
+    <!--Se resuelve el expediente -->
+    <button type="button" id="resolverExpedientesboton" class="hidden">Mostrar expedientes asignados</button>
+    
+    <div id="resolverExpedientesForm" class="hidden">
+        <h2>Expedientes asignados</h2>
+        
+        <table id="resolverExpedientesTable">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>F.Cre.</th>
+                    <th>F.Asig</th>
+                    <th>F.Res.</th>
+                    <th>SIP</th>
+                    <th>Acciones</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button type="button" id="cancelarResolverExpedientesButton">Volver</button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="rpc_cliente.js"></script>
+    <script src="rest.js"></script>
+    <script src="main_rpc.js"></script>
+</body>
+</html>
