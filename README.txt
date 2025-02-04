@@ -37,7 +37,6 @@ Steps
 Clone this repository:
 
 bash
-Copy
 git clone https://github.com/yourusername/MediConnect.git  
 Start XAMPP and ensure MySQL and Apache are running.
 
